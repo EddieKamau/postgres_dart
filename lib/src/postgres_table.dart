@@ -141,6 +141,28 @@ class PostgresTable {
   }
 
   // update
+  Future<DbResponse> update({
+    required Map<String, dynamic> update,
+    required Where? where,
+  })async{
+    
+    // ignore: no_leading_underscores_for_local_identifiers
+    List<String> _values = [];
+
+    for (var key in update.keys) {
+      String val = update[key] is String ? "'${update[key]}'" : update[key].toString();
+      _values.add('$key = $val');
+    }
+    if(_values.isEmpty) return DbResponse([], []);
+
+    // ignore: no_leading_underscores_for_local_identifiers
+    String _value = _values.join(', ');
+
+    String query = ' UPDATE "$tableName" SET $_value ${getQuery(where: where,)}';
+    var dbRes = await db.query(query);
+
+    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+  }
 
   // delete
   Future<DbResponse> delete(Where where)async{
