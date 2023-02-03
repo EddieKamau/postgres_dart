@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:postgres/postgres.dart';
 import 'package:postgres_dart/src/aggregate.dart';
 import 'package:postgres_dart/src/column.dart';
@@ -111,7 +113,7 @@ class PostgresTable {
     String? tableAs,
     Where? where, OrderBy? orderBy, int? limit
   })async{
-    String query = 'SELECT ${columns.isEmpty ? "*" : columns.join(",")} FROM $tableName ${tableAs == null ? "" : "AS $tableAs"} ${joins.map((e) => e.query,).join(" ")} ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
+    String query = 'SELECT ${columns.isEmpty ? "*" : columns.join(",")} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map((e) => e.query,).join(" ")} ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
     var dbRes = await db.query(query);
 
     return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
@@ -119,13 +121,30 @@ class PostgresTable {
   }
 
 
-  // update
-
   // insert
+  Future<DbResponse> insert({
+    required List values,
+    List<String>? columns,
+  })async{
+    // ignore: no_leading_underscores_for_local_identifiers
+    List<String> _values = values.map((e) {
+      if(e is String){
+        return "'$e'";
+      }else{
+        return e.toString();
+      }
+    }).toList();
+    String query = 'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.join(',')})"} VALUES (${_values.join(",")})';
+    var dbRes = await db.query(query);
+
+    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+  }
+
+  // update
 
   // delete
   Future<DbResponse> delete(Where where)async{
-    String query = 'DELETE FROM $tableName ${getQuery(where: where,)}';
+    String query = 'DELETE FROM "$tableName" ${getQuery(where: where,)}';
     var dbRes = await db.query(query);
 
     return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
@@ -133,7 +152,7 @@ class PostgresTable {
 
   // deleteAll
   Future<DbResponse> deleteAll()async{
-    String query = 'DELETE FROM $tableName';
+    String query = 'DELETE FROM "$tableName"';
     var dbRes = await db.query(query);
 
     return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
