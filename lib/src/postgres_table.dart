@@ -121,7 +121,23 @@ class PostgresTable {
 
   // update
 
+  // insert
+
   // delete
+  Future<DbResponse> delete(Where where)async{
+    String query = 'DELETE FROM $tableName ${getQuery(where: where,)}';
+    var dbRes = await db.query(query);
+
+    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+  }
+
+  // deleteAll
+  Future<DbResponse> deleteAll()async{
+    String query = 'DELETE FROM $tableName';
+    var dbRes = await db.query(query);
+
+    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+  }
 
   // transaction
 }
