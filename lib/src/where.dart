@@ -56,7 +56,12 @@ enum WhereOperator{
   isLike('LIKE'),
   isIn('IN'),
   isNull('IS NULL'),
-  isNotNull('IS NOT NULL');
+  isNotNull('IS NOT NULL'),
+  
+  regXMatchesAndCaseSensitive('~'),
+  regXMatchesAndCaseInsensitive('~*'),
+  regXNotMatchesAndCaseSensitive('!~'),
+  regXNotMatchesAndCaseInsensitive('!~*');
 
   final String operator;
   const WhereOperator(this.operator);
