@@ -91,8 +91,8 @@ class PostgresTable {
   ///   avg([Avg("amount",)]);
   ///   avg([Acg("amount", label: "averageAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> avg(List<Sum> sum, {Where? where,})async{
-    String query = 'SELECT ${(sum.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> avg(List<Avg> avg, {Where? where,})async{
+    String query = 'SELECT ${(avg.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
