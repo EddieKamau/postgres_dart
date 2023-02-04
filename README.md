@@ -1,39 +1,80 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+## postgres_dart
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+Wraps postgres package with dart Objects and methods for performing sql queries.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+Create PostgresDb and open it:
 
 ```dart
-const like = 'sample';
+var db = PostgresDb.fromUrl('postgresql://username:password@hosturl/databaseName');
+  await db.open();
+```
+```dart
+var db = PostgresDb(host: 'host', databaseName: 'databaseName', username: 'username', password: 'password');
+  await db.open();
 ```
 
-## Additional information
+examples
+```dart
+     // insert
+  await db.table('tableName').insert(columns: ['name', 'age'], values: ['Name Name', 30]);
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+  // update
+  await db.table('tableName').update(update: {"age": 40}, where: Where('name', WhereOperator.isEqual, 'Name Name'));
+  // update all
+  await db.table('tableName').update(update: {"age": 40}, where: null);
+
+  // delete
+  await db.table('tableName').delete(Where('name', WhereOperator.isEqual, 'Name Name'));
+  await db.table('tableName').deleteAll();
+
+  // fetch
+  await db.table('tableName').select(
+    columns: [Column('id'), Column('name', columnAs: 'userName'), Column('age')],
+    where: Where('name', WhereOperator.isEqual, 'Name Name'),
+    orderBy: OrderBy('name', ascending: true)
+  );
+
+  // max, min, 
+  await db.table('tableName').max([Max('age')]);
+  await db.table('tableName').min([Min('age', label: 'minAge')]);
+
+  // count
+  await db.table('tableName').count([Count(columnName: '*')]);
+
+  // sum, avg
+  await db.table('tableName').sum([Sum(columnName: 'age', label: 'totalAge'), Sum(columnName: 'amount')]);
+  await db.table('tableName').avg([Avg(columnName: 'age', label: 'averageAge'), Avg(columnName: 'amount')]);
+
+  // aggregate
+  await db.table('tableName').aggregate([
+    Count(columnName: '*'),
+    Sum(columnName: 'amount', label: 'totalAmount'),
+    Avg(columnName: 'age', label: 'averageAge'),
+  ]);
+
+  // group
+  await db.table('tableName').group(
+    groupBy: ['gender'],
+    columns: [Column('gender')],
+    aggregates: [
+      Count(columnName: '*'),
+      Sum(columnName: 'amount', label: 'totalAmount'),
+      Avg(columnName: 'age', label: 'averageAge'),
+    ]
+  );
+
+  // join
+  await db.table('tableName').join(
+    tableAs: 't1',
+    columns: [Column('t1.id', columnAs: 'id'), Column('t1.name', columnAs: 'name'), Column('t3.age', columnAs: 'age'),],
+    joins: [
+      Join(joinType: JoinType.inner, tableName: 'table2', tableAs: 't2', onorUsing: JoinOn(leftColumnName: 't1.id', rightColumnName: 't2.userid', operator: WhereOperator.isEqual)),
+      Join(joinType: JoinType.inner, tableName: 'table3', tableAs: 't3', onorUsing: JoinUsing(columnName: 'userid')),
+    ]
+  );
+```
+
+

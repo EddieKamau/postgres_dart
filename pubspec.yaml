@@ -1,12 +1,12 @@
 name: postgres_dart
-description: A starting point for Dart libraries or applications.
+description: Wraps postgres package with dart methods for performing sql queries.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: '>=3.0.0-171.0.dev <4.0.0'
 
-# Add regular dependencies here.
+
 dependencies:
   postgres: ^2.5.2
 
