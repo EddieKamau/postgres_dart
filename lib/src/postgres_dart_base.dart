@@ -3,8 +3,11 @@ import 'package:postgres_dart/src/postgres_table.dart';
 
 class PostgresDb {
   PostgresDb({
-    required this.host, this.port = 5432, required this.databaseName,
-    required this.username, required this.password,
+    required this.host,
+    this.port = 5432,
+    required this.databaseName,
+    required this.username,
+    required this.password,
     int timeoutInSeconds = 30,
     int queryTimeoutInSeconds = 30,
     String timeZone = 'UTC',
@@ -12,10 +15,13 @@ class PostgresDb {
     bool isUnixSocket = false,
     bool allowClearTextPassword = false,
     ReplicationMode replicationMode = ReplicationMode.none,
-  }){
+  }) {
     db = PostgreSQLConnection(
-      host, port, databaseName,
-      username: username, password: password,
+      host,
+      port,
+      databaseName,
+      username: username,
+      password: password,
       timeoutInSeconds: timeoutInSeconds,
       queryTimeoutInSeconds: queryTimeoutInSeconds,
       timeZone: timeZone,
@@ -27,25 +33,23 @@ class PostgresDb {
   }
 
   PostgresDb.fromUrl(
-    String url, 
-    {
-      this.port = 5432,
-      int timeoutInSeconds = 30,
-      int queryTimeoutInSeconds = 30,
-      String timeZone = 'UTC',
-      bool useSSL = false,
-      bool isUnixSocket = false,
-      bool allowClearTextPassword = false,
-      ReplicationMode replicationMode = ReplicationMode.none,
-    }
-  ){
+    String url, {
+    this.port = 5432,
+    int timeoutInSeconds = 30,
+    int queryTimeoutInSeconds = 30,
+    String timeZone = 'UTC',
+    bool useSSL = false,
+    bool isUnixSocket = false,
+    bool allowClearTextPassword = false,
+    ReplicationMode replicationMode = ReplicationMode.none,
+  }) {
     var base = url.split('postgresql://');
-    if(base.length > 1){
+    if (base.length > 1) {
       host = base[1].split('@').last.split('/')[0];
       databaseName = url.split('/').last;
       username = base[1].split(':').first;
       password = base[1].split('@').first.split(':').last;
-    }else{
+    } else {
       host = '';
       databaseName = '';
       username = '';
@@ -53,8 +57,11 @@ class PostgresDb {
     }
 
     db = PostgreSQLConnection(
-      host, port, databaseName,
-      username: username, password: password,
+      host,
+      port,
+      databaseName,
+      username: username,
+      password: password,
       timeoutInSeconds: timeoutInSeconds,
       queryTimeoutInSeconds: queryTimeoutInSeconds,
       timeZone: timeZone,
@@ -63,7 +70,6 @@ class PostgresDb {
       allowClearTextPassword: allowClearTextPassword,
       replicationMode: replicationMode,
     );
-    
   }
 
   late PostgreSQLConnection db;
@@ -74,14 +80,21 @@ class PostgresDb {
   late final String username;
   late final String password;
 
-  Future open()=> db.open();
+  Future open() => db.open();
 
-  PostgresTable table(String tableName) => PostgresTable(db: db, tableName: tableName);
+  PostgresTable table(String tableName) =>
+      PostgresTable(db: db, tableName: tableName);
 
-  Future query(String query, {
+  Future query(
+    String query, {
     Map<String, dynamic>? substitutionValues,
     bool? allowReuse,
     int? timeoutInSeconds,
     bool? useSimpleQueryProtocol,
-  })=> db.query(query, substitutionValues: substitutionValues, allowReuse: allowReuse, timeoutInSeconds: timeoutInSeconds, useSimpleQueryProtocol: useSimpleQueryProtocol);
+  }) =>
+      db.query(query,
+          substitutionValues: substitutionValues,
+          allowReuse: allowReuse,
+          timeoutInSeconds: timeoutInSeconds,
+          useSimpleQueryProtocol: useSimpleQueryProtocol);
 }

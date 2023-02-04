@@ -8,14 +8,12 @@ class Where {
     this.columnName,
     this.operator,
     this.value,
-    
   );
   Where.not(
     this.columnName,
     this.operator,
     this.value,
-    
-  ){
+  ) {
     prev = 'WHERE NOT';
   }
 
@@ -30,27 +28,38 @@ class Where {
     return '$prev "$columnName" ${operator.operator} $_value ';
   }
 
-  Where or(String columnName, WhereOperator operator, Object value, ){
+  Where or(
+    String columnName,
+    WhereOperator operator,
+    Object value,
+  ) {
     var where = Where(columnName, operator, value);
     where.prev = '$query OR ';
     return where;
   }
 
-  Where and(String columnName, WhereOperator operator, Object value, ){
+  Where and(
+    String columnName,
+    WhereOperator operator,
+    Object value,
+  ) {
     var where = Where(columnName, operator, value);
     where.prev = '$query AND ';
     return where;
   }
 
-  Where andNot(String columnName, WhereOperator operator, Object value, ){
+  Where andNot(
+    String columnName,
+    WhereOperator operator,
+    Object value,
+  ) {
     var where = Where(columnName, operator, value);
     where.prev = '$query AND NOT ';
     return where;
   }
-
 }
 
-enum WhereOperator{
+enum WhereOperator {
   isEqual('='),
   isGreaterThan('>'),
   isLessThan('<'),
@@ -62,7 +71,7 @@ enum WhereOperator{
   isIn('IN'),
   isNull('IS NULL'),
   isNotNull('IS NOT NULL'),
-  
+
   regXMatchesAndCaseSensitive('~'),
   regXMatchesAndCaseInsensitive('~*'),
   regXNotMatchesAndCaseSensitive('!~'),

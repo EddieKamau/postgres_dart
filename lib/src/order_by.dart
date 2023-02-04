@@ -1,5 +1,5 @@
 /// For multiple order by, use [OrderBy.and]
-/// ie; 
+/// ie;
 /// ```dart
 ///   OrderBy("date");
 ///   OrderBy("date").and(OrderBy("name", ascending: false));
@@ -11,9 +11,10 @@ class OrderBy {
 
   String prev = 'ORDER BY ';
 
-  String get query => '$prev $columnName ${ascending == null ? "" : ascending! ? "ASC": "DESC"}';
+  String get query =>
+      '$prev $columnName ${ascending == null ? "" : ascending! ? "ASC" : "DESC"}';
 
-  OrderBy and(OrderBy orderBy){
+  OrderBy and(OrderBy orderBy) {
     orderBy.prev = '$query, ';
     return orderBy;
   }

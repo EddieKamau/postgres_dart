@@ -11,41 +11,48 @@ class PostgresTable {
   final PostgreSQLConnection db;
   final String tableName;
 
-  String getQuery({
-    Where? where, 
-    OrderBy? orderBy,  
-    int? limit,
-    List<String>? groupBy
-  }) {
-    return '${where == null ? "" : where.query} ${groupBy == null ? "" : "GROUP BY ${groupBy.map((e) => '"$e"',).join(",")}"} ${orderBy == null ? "" : orderBy.query} ${limit == null ? "" : "LIMIT $limit"}';
+  String getQuery(
+      {Where? where, OrderBy? orderBy, int? limit, List<String>? groupBy}) {
+    return '${where == null ? "" : where.query} ${groupBy == null ? "" : "GROUP BY ${groupBy.map(
+          (e) => '"$e"',
+        ).join(",")}"} ${orderBy == null ? "" : orderBy.query} ${limit == null ? "" : "LIMIT $limit"}';
   }
 
   // select
   Future<DbResponse> select({
-    Where? where, 
-    OrderBy? orderBy, 
-    List<Column> columns = const [], 
+    Where? where,
+    OrderBy? orderBy,
+    List<Column> columns = const [],
     bool distinct = false,
     int? limit,
-  })async{
+  }) async {
     // ignore: no_leading_underscores_for_local_identifiers
     String _fields = columns.isEmpty ? '*' : columns.join(',');
-    String query = 'SELECT ${distinct ? "DISTINCT " : ''}$_fields FROM "$tableName" ${getQuery(where: where, orderBy: orderBy, limit:limit)}';
+    String query =
+        'SELECT ${distinct ? "DISTINCT " : ''}$_fields FROM "$tableName" ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
-  // min 
+  // min
   /// ```dart
   ///   min([Min("amount", label: "minAmount")]);
   ///   min([Min("amount", label: "minAmount"), Min("age", label: "minAge"),], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> min(List<Min> min, {Where? where,})async{
-    String query = 'SELECT ${(min.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> min(
+    List<Min> min, {
+    Where? where,
+  }) async {
+    String query =
+        'SELECT ${(min.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // max
@@ -53,11 +60,17 @@ class PostgresTable {
   ///   max([Max("amount", label: "maxAmount")]);
   ///   max([Max("amount", label: "maxAmount"), Min("age", label: "maxAge"),], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> max(List<Max> max, {Where? where,})async{
-    String query = 'SELECT ${(max.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> max(
+    List<Max> max, {
+    Where? where,
+  }) async {
+    String query =
+        'SELECT ${(max.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // count
@@ -65,12 +78,17 @@ class PostgresTable {
   ///   count([Count("*")]);
   ///   count([Count("*")], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> count(List<Count> count, {Where? where,})async{
-    String query = 'SELECT ${(count.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> count(
+    List<Count> count, {
+    Where? where,
+  }) async {
+    String query =
+        'SELECT ${(count.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
-
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // sum
@@ -78,12 +96,17 @@ class PostgresTable {
   ///   sum([Sum("amount",)]);
   ///   sum([Sum("amount", label: "totalAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> sum(List<Sum> sum, {Where? where,})async{
-    String query = 'SELECT ${(sum.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> sum(
+    List<Sum> sum, {
+    Where? where,
+  }) async {
+    String query =
+        'SELECT ${(sum.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
-
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // avg
@@ -91,84 +114,101 @@ class PostgresTable {
   ///   avg([Avg("amount",)]);
   ///   avg([Acg("amount", label: "averageAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> avg(List<Avg> avg, {Where? where,})async{
-    String query = 'SELECT ${(avg.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> avg(
+    List<Avg> avg, {
+    Where? where,
+  }) async {
+    String query =
+        'SELECT ${(avg.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
-
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // Aggregate
   /// ```dart
   ///   aggregate(
   ///     [
-  ///       Sum("amount", label: "totalAmount"), 
-  ///       Avg("amount", label: "averageAmount"), 
-  ///       Max("amount", label: "maxAmount", castToNumeric: true), 
-  ///       Min("amount", label: "minAmount"), 
-  ///       Count("amount"), 
+  ///       Sum("amount", label: "totalAmount"),
+  ///       Avg("amount", label: "averageAmount"),
+  ///       Max("amount", label: "maxAmount", castToNumeric: true),
+  ///       Min("amount", label: "minAmount"),
+  ///       Count("amount"),
   ///     ]
   ///   );
-  /// 
+  ///
   ///   aggregate([Sum("amount", label: "totalAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
   /// ```
-  Future<DbResponse> aggregate(List<Aggregate> aggregates, {Where? where,})async{
-    String query = 'SELECT ${(aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+  Future<DbResponse> aggregate(
+    List<Aggregate> aggregates, {
+    Where? where,
+  }) async {
+    String query =
+        'SELECT ${(aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
-
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // group
-  Future<DbResponse> group({
-    required List<String> groupBy,
-    List<Column>? columns,
-    List<Aggregate>? aggregates, 
-    Where? where, 
-    OrderBy? orderBy
-    }
-  )async{
-    String query = 'SELECT ${columns == null ? "" : "${columns.join(",")},"} ${aggregates == null ? "" : (aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where, groupBy: groupBy, orderBy: orderBy)}';
+  Future<DbResponse> group(
+      {required List<String> groupBy,
+      List<Column>? columns,
+      List<Aggregate>? aggregates,
+      Where? where,
+      OrderBy? orderBy}) async {
+    String query =
+        'SELECT ${columns == null ? "" : "${columns.join(",")},"} ${aggregates == null ? "" : (aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where, groupBy: groupBy, orderBy: orderBy)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
-
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // joins
-  Future<DbResponse> join({
-    List<Column> columns = const [],
-    required List<Join> joins, 
-    String? tableAs,
-    Where? where, OrderBy? orderBy, int? limit
-  })async{
-    String query = 'SELECT ${columns.isEmpty ? "*" : columns.join(",")} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map((e) => e.query,).join(" ")} ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
+  Future<DbResponse> join(
+      {List<Column> columns = const [],
+      required List<Join> joins,
+      String? tableAs,
+      Where? where,
+      OrderBy? orderBy,
+      int? limit}) async {
+    String query =
+        'SELECT ${columns.isEmpty ? "*" : columns.join(",")} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map(
+              (e) => e.query,
+            ).join(" ")} ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
-
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
-
 
   // insert
   Future<DbResponse> insert({
     required List values,
     List<String>? columns,
-  })async{
+  }) async {
     // ignore: no_leading_underscores_for_local_identifiers
     List<String> _values = values.map((e) {
-      if(e is String){
+      if (e is String) {
         return "'$e'";
-      }else{
+      } else {
         return e.toString();
       }
     }).toList();
-    String query = 'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.join(',')})"} VALUES (${_values.join(",")})';
+    String query =
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.join(',')})"} VALUES (${_values.join(",")})';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // update
@@ -184,40 +224,50 @@ class PostgresTable {
   Future<DbResponse> update({
     required Map<String, dynamic> update,
     required Where? where,
-  })async{
-    
+  }) async {
     // ignore: no_leading_underscores_for_local_identifiers
     List<String> _values = [];
 
     for (var key in update.keys) {
-      String val = update[key] is String ? "'${update[key]}'" : update[key].toString();
+      String val =
+          update[key] is String ? "'${update[key]}'" : update[key].toString();
       _values.add('$key = $val');
     }
-    if(_values.isEmpty) return DbResponse([], []);
+    if (_values.isEmpty) return DbResponse([], []);
 
     // ignore: no_leading_underscores_for_local_identifiers
     String _value = _values.join(', ');
 
-    String query = ' UPDATE "$tableName" SET $_value ${getQuery(where: where,)}';
+    String query = ' UPDATE "$tableName" SET $_value ${getQuery(
+      where: where,
+    )}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // delete
-  Future<DbResponse> delete(Where where)async{
-    String query = 'DELETE FROM "$tableName" ${getQuery(where: where,)}';
+  Future<DbResponse> delete(Where where) async {
+    String query = 'DELETE FROM "$tableName" ${getQuery(
+      where: where,
+    )}';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // deleteAll
-  Future<DbResponse> deleteAll()async{
+  Future<DbResponse> deleteAll() async {
     String query = 'DELETE FROM "$tableName"';
     var dbRes = await db.query(query);
 
-    return DbResponse(dbRes.columnDescriptions.map((e) => e.columnName).toList(), List<List>.from(dbRes.toList()));
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
   }
 
   // transaction
@@ -228,16 +278,16 @@ class DbResponse {
   List<String> columnNames;
   List<List> data;
 
-  List<Map<String, dynamic>> asListMap(){
+  List<Map<String, dynamic>> asListMap() {
     return [
-      for(int i=0; i<data.length; i++)
+      for (int i = 0; i < data.length; i++)
         {
-          for(int keyIndex=0; keyIndex < columnNames.length; keyIndex++)
+          for (int keyIndex = 0; keyIndex < columnNames.length; keyIndex++)
             columnNames[keyIndex]: data[i][keyIndex]
         }
     ];
   }
 
   @override
-  String toString()=> asListMap().toString();
+  String toString() => asListMap().toString();
 }
