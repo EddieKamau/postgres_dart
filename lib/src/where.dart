@@ -16,7 +16,7 @@ class Where {
     this.value,
     
   ){
-    prev = 'WHERE NOT ';
+    prev = 'WHERE NOT';
   }
 
   final String columnName;
