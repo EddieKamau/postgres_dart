@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:postgres/postgres.dart';
 import 'package:postgres_dart/src/aggregate.dart';
 import 'package:postgres_dart/src/column.dart';
@@ -39,6 +37,10 @@ class PostgresTable {
   }
 
   // min 
+  /// ```dart
+  ///   min([Min("amount", label: "minAmount")]);
+  ///   min([Min("amount", label: "minAmount"), Min("age", label: "minAge"),], where: Where("age",WhereOperator.isGreaterThan , 40));
+  /// ```
   Future<DbResponse> min(List<Min> min, {Where? where,})async{
     String query = 'SELECT ${(min.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
@@ -47,6 +49,10 @@ class PostgresTable {
   }
 
   // max
+  /// ```dart
+  ///   max([Max("amount", label: "maxAmount")]);
+  ///   max([Max("amount", label: "maxAmount"), Min("age", label: "maxAge"),], where: Where("age",WhereOperator.isGreaterThan , 40));
+  /// ```
   Future<DbResponse> max(List<Max> max, {Where? where,})async{
     String query = 'SELECT ${(max.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
@@ -55,6 +61,10 @@ class PostgresTable {
   }
 
   // count
+  /// ```dart
+  ///   count([Count("*")]);
+  ///   count([Count("*")], where: Where("age",WhereOperator.isGreaterThan , 40));
+  /// ```
   Future<DbResponse> count(List<Count> count, {Where? where,})async{
     String query = 'SELECT ${(count.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
@@ -64,6 +74,10 @@ class PostgresTable {
   }
 
   // sum
+  /// ```dart
+  ///   sum([Sum("amount",)]);
+  ///   sum([Sum("amount", label: "totalAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
+  /// ```
   Future<DbResponse> sum(List<Sum> sum, {Where? where,})async{
     String query = 'SELECT ${(sum.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
@@ -73,6 +87,10 @@ class PostgresTable {
   }
 
   // avg
+  /// ```dart
+  ///   avg([Avg("amount",)]);
+  ///   avg([Acg("amount", label: "averageAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
+  /// ```
   Future<DbResponse> avg(List<Sum> sum, {Where? where,})async{
     String query = 'SELECT ${(sum.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
@@ -82,6 +100,19 @@ class PostgresTable {
   }
 
   // Aggregate
+  /// ```dart
+  ///   aggregate(
+  ///     [
+  ///       Sum("amount", label: "totalAmount"), 
+  ///       Avg("amount", label: "averageAmount"), 
+  ///       Max("amount", label: "maxAmount", castToNumeric: true), 
+  ///       Min("amount", label: "minAmount"), 
+  ///       Count("amount"), 
+  ///     ]
+  ///   );
+  /// 
+  ///   aggregate([Sum("amount", label: "totalAmount")], where: Where("age",WhereOperator.isGreaterThan , 40));
+  /// ```
   Future<DbResponse> aggregate(List<Aggregate> aggregates, {Where? where,})async{
     String query = 'SELECT ${(aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
@@ -141,6 +172,15 @@ class PostgresTable {
   }
 
   // update
+  /// ```dart
+  /// update(
+  ///   update: {
+  ///     "column1": "new value",
+  ///     "age": 60
+  ///   },
+  ///   where: Where("id", WhereOperator.isEqual, 12)
+  /// );
+  /// ```
   Future<DbResponse> update({
     required Map<String, dynamic> update,
     required Where? where,

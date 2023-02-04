@@ -1,3 +1,8 @@
+/// ```dart
+/// Where("age", WhereOperator.isGreaterThan, 40);
+/// Where("age", WhereOperator.isGreaterThan, 40).and("gender", WhereOperator.isEqual, "M");
+/// Where.not("age", WhereOperator.isGreaterThan, 40).and("gender", WhereOperator.isEqual, "M");
+/// ```
 class Where {
   Where(
     this.columnName,

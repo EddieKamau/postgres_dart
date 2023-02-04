@@ -1,5 +1,7 @@
 import 'package:postgres_dart/src/where.dart' show WhereOperator;
 
+/// [tableAs] is an alias you can assign to the table for easier table reference; ie, if the table is named myTable, and given [tableAs] as mt
+/// Accessing columns can be mt.amount instead od myTable.amount
 class Join{
   Join({required this.joinType, required this.tableName, required this.onorUsing, this.tableAs});
   final String tableName;
@@ -28,6 +30,7 @@ class OnorUsing {
   String query;
 }
 
+/// ON leftTable.column1 = rightTable.column2
 class JoinOn extends OnorUsing {
   JoinOn({
     required this.leftColumnName, required this.rightColumnName, required this.operator,
@@ -39,6 +42,7 @@ class JoinOn extends OnorUsing {
   
 }
 
+/// Using (columnName)
 class JoinUsing extends OnorUsing {
   JoinUsing({
     required this.columnName,
