@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="postgres_dart library API docs, for the Dart programming language.">
+  <title>postgres_dart library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">postgres_dart</a></li>
+    <li class="self-crumb">postgres_dart library</li>
+  </ol>
+  <div class="self-name">postgres_dart</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar=""
+      data-below-sidebar="postgres_dart&#47;postgres_dart-library-sidebar.html">
+      
+      <div>
+<h1><span class="kind-library">postgres_dart</span> library 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Support for doing something awesome.</p>
+<p>More dartdocs go here.</p>
+</section>
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+
+      <dl>
+        <dt id="Aggregate">
+  <span class="name "><a href="../postgres_dart/Aggregate-class.html">Aggregate</a></span> 
+
+</dt>
+<dd>
+  <a href="../postgres_dart/Aggregate-class.html">Aggregate</a> functions such as <a href="../postgres_dart/Count-class.html">Count</a>, <a href="../postgres_dart/Sum-class.html">Sum</a>, <a href="../postgres_dart/Avg-class.html">Avg</a>, min and max
+<a href="../postgres_dart/Aggregate/columnName.html">columnName</a> The Column being aggregated; ie, <code>SUM("amount")</code> where <code>amount</code> is the <a href="../postgres_dart/Aggregate/columnName.html">columnName</a>
+<a href="../postgres_dart/Aggregate/label.html">label</a> is used for the column name; ie: <code>sum("amount") as myTotal</code>, where myTotal is the label
+<a href="../postgres_dart/Aggregate/castToNumeric.html">castToNumeric</a> is used when the some or all the values in the columns are saved as String(varchar) but are numbers; converts <code>"10"</code> to 10
+</dd>
+
+        <dt id="Avg">
+  <span class="name "><a href="../postgres_dart/Avg-class.html">Avg</a></span> 
+
+</dt>
+<dd>
+  <a href="../postgres_dart/Avg-class.html">Avg</a> returns the average for specified column
+</dd>
+
+        <dt id="Column">
+  <span class="name "><a href="../postgres_dart/Column-class.html">Column</a></span> 
+
+</dt>
+<dd>
+  <a href="../postgres_dart/Column/columnName.html">columnName</a> is the column name as in the table
+<a href="../postgres_dart/Column/columnAs.html">columnAs</a> is name of the column on the response
+</dd>
+
+        <dt id="ColumnDescription">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/ColumnDescription-class.html">ColumnDescription</a></span> 
+
+</dt>
+<dd>
+  A description of a column.
+</dd>
+
+        <dt id="Count">
+  <span class="name "><a href="../postgres_dart/Count-class.html">Count</a></span> 
+
+</dt>
+<dd>
+  <a href="../postgres_dart/Count-class.html">Count</a> returns the total row count for the query
+</dd>
+
+        <dt id="DbResponse">
+  <span class="name "><a href="../postgres_dart/DbResponse-class.html">DbResponse</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="Join">
+  <span class="name "><a href="../postgres_dart/Join-class.html">Join</a></span> 
+
+</dt>
+<dd>
+  <a href="../postgres_dart/Join/tableAs.html">tableAs</a> is an alias you can assign to the table for easier table reference; ie, if the table is named myTable, and given <a href="../postgres_dart/Join/tableAs.html">tableAs</a> as mt
+Accessing columns can be mt.amount instead od myTable.amount
+</dd>
+
+        <dt id="JoinOn">
+  <span class="name "><a href="../postgres_dart/JoinOn-class.html">JoinOn</a></span> 
+
+</dt>
+<dd>
+  ON leftTable.column1 = rightTable.column2
+</dd>
+
+        <dt id="JoinUsing">
+  <span class="name "><a href="../postgres_dart/JoinUsing-class.html">JoinUsing</a></span> 
+
+</dt>
+<dd>
+  Using (columnName)
+</dd>
+
+        <dt id="LSN">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/LSN-class.html">LSN</a></span> 
+
+</dt>
+<dd>
+  LSN is a PostgreSQL Log Sequence Number.
+</dd>
+
+        <dt id="Max">
+  <span class="name "><a href="../postgres_dart/Max-class.html">Max</a></span> 
+
+</dt>
+<dd>
+  Returns the maximum Value in the given column
+</dd>
+
+        <dt id="Min">
+  <span class="name "><a href="../postgres_dart/Min-class.html">Min</a></span> 
+
+</dt>
+<dd>
+  Returns the minimum Value in the given column
+</dd>
+
+        <dt id="Notification">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/Notification-class.html">Notification</a></span> 
+
+</dt>
+<dd>
+  Represents a notification from PostgreSQL.
+</dd>
+
+        <dt id="OnorUsing">
+  <span class="name "><a href="../postgres_dart/OnorUsing-class.html">OnorUsing</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="OrderBy">
+  <span class="name "><a href="../postgres_dart/OrderBy-class.html">OrderBy</a></span> 
+
+</dt>
+<dd>
+  For multiple order by, use <a href="../postgres_dart/OrderBy/and.html">OrderBy.and</a>
+ie;
+</dd>
+
+        <dt id="PgPoint">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PgPoint-class.html">PgPoint</a></span> 
+
+</dt>
+<dd>
+  Describes PostgreSQL's geometric type: <code>point</code>.
+</dd>
+
+        <dt id="PostgresDb">
+  <span class="name "><a href="../postgres_dart/PostgresDb-class.html">PostgresDb</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="PostgreSQLConnection">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLConnection-class.html">PostgreSQLConnection</a></span> 
+
+</dt>
+<dd>
+  Instances of this class connect to and communicate with a PostgreSQL database.
+</dd>
+
+        <dt id="PostgreSQLExecutionContext">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLExecutionContext-class.html">PostgreSQLExecutionContext</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="PostgreSQLFormat">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLFormat-class.html">PostgreSQLFormat</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="PostgreSQLResult">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLResult-class.html">PostgreSQLResult</a></span> 
+
+</dt>
+<dd>
+  The query result.
+</dd>
+
+        <dt id="PostgreSQLResultRow">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLResultRow-class.html">PostgreSQLResultRow</a></span> 
+
+</dt>
+<dd>
+  A single row of a query result.
+</dd>
+
+        <dt id="PostgreSQLRollback">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLRollback-class.html">PostgreSQLRollback</a></span> 
+
+</dt>
+<dd>
+  Represents a rollback from a transaction.
+</dd>
+
+        <dt id="PostgresTable">
+  <span class="name "><a href="../postgres_dart/PostgresTable-class.html">PostgresTable</a></span> 
+
+</dt>
+<dd>
+  Contains Table methods such as <a href="../postgres_dart/PostgresTable/select.html">select</a>, <a href="../postgres_dart/PostgresTable/insert.html">insert</a>, <a href="../postgres_dart/PostgresTable/update.html">update</a>, <a href="../postgres_dart/PostgresTable/delete.html">delete</a>, <a href="../postgres_dart/PostgresTable/deleteAll.html">deleteAll</a>, <a href="../postgres_dart/PostgresTable/min.html">min</a>, <a href="../postgres_dart/PostgresTable/max.html">max</a>, <a href="../postgres_dart/PostgresTable/count.html">count</a>, <a href="../postgres_dart/PostgresTable/sum.html">sum</a>, <a href="../postgres_dart/PostgresTable/avg.html">avg</a>, <a href="../postgres_dart/PostgresTable/aggregate.html">aggregate</a>, <a href="../postgres_dart/PostgresTable/group.html">group</a>, <a href="../postgres_dart/PostgresTable/join.html">join</a>
+</dd>
+
+        <dt id="Sum">
+  <span class="name "><a href="../postgres_dart/Sum-class.html">Sum</a></span> 
+
+</dt>
+<dd>
+  <a href="../postgres_dart/Sum-class.html">Sum</a> returns the total sum for specified column
+</dd>
+
+        <dt id="Where">
+  <span class="name "><a href="../postgres_dart/Where-class.html">Where</a></span> 
+
+</dt>
+<dd>
+  <code class="language-dart">Where("age", WhereOperator.isGreaterThan, 40);
+Where("age", WhereOperator.isGreaterThan, 40).and("gender", WhereOperator.isEqual, "M");
+Where.not("age", WhereOperator.isGreaterThan, 40).and("gender", WhereOperator.isEqual, "M");
+</code>
+</dd>
+
+      </dl>
+    </section>
+
+
+
+
+
+
+    <section class="summary offset-anchor" id="enums">
+      <h2>Enums</h2>
+
+      <dl>
+        <dt id="AggregateType">
+  <span class="name "><a href="../postgres_dart/AggregateType.html">AggregateType</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="JoinType">
+  <span class="name "><a href="../postgres_dart/JoinType.html">JoinType</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+        <dt id="PostgreSQLDataType">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLDataType.html">PostgreSQLDataType</a></span> 
+
+</dt>
+<dd>
+  Supported data types.
+</dd>
+
+        <dt id="PostgreSQLSeverity">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLSeverity.html">PostgreSQLSeverity</a></span> 
+
+</dt>
+<dd>
+  The severity level of a <a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLException-class.html">PostgreSQLException</a>.
+</dd>
+
+        <dt id="ReplicationMode">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/ReplicationMode.html">ReplicationMode</a></span> 
+
+</dt>
+<dd>
+  Streaming Replication Protocol Options
+</dd>
+
+        <dt id="WhereOperator">
+  <span class="name "><a href="../postgres_dart/WhereOperator.html">WhereOperator</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="exceptions">
+      <h2>Exceptions / Errors</h2>
+
+      <dl>
+        <dt id="PostgreSQLException">
+  <span class="name "><a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLException-class.html">PostgreSQLException</a></span> 
+
+</dt>
+<dd>
+  Exception thrown by <a href="https://pub.dev/documentation/postgres/2.5.2/postgres/PostgreSQLConnection-class.html">PostgreSQLConnection</a> instances.
+</dd>
+
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">postgres_dart</a></li>
+    <li class="self-crumb">postgres_dart library</li>
+</ol>
+
+
+    <h5><span class="package-name">postgres_dart</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="../postgres_dart/postgres_dart-library.html">postgres_dart</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>postgres_dart library</h5>
+  </div><!--/sidebar-offcanvas-right-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    postgres_dart
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+

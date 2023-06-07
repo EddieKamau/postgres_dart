@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="generator" content="made with love by dartdoc 6.2.2-dev">
+  <meta name="description" content="postgres_dart API docs, for the Dart programming language.">
+  <title>postgres_dart - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">postgres_dart package</li>
+  </ol>
+  <div class="self-name">postgres_dart</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h2 id="postgres_dart">postgres_dart</h2>
+<p>Wraps postgres package with dart Objects and methods for performing sql queries.</p>
+<h2 id="usage">Usage</h2>
+<p>Create PostgresDb and open it:</p>
+<pre class="language-dart"><code class="language-dart">var db = PostgresDb.fromUrl('postgresql://username:password@hosturl/databaseName');
+  await db.open();
+</code></pre>
+<pre class="language-dart"><code class="language-dart">var db = PostgresDb(host: 'host', databaseName: 'databaseName', username: 'username', password: 'password');
+  await db.open();
+</code></pre>
+<p>examples</p>
+<pre class="language-dart"><code class="language-dart">     // insert
+  await db.table('tableName').insert(columns: ['name', 'age'], values: ['Name Name', 30]);
+
+  // update
+  await db.table('tableName').update(update: {"age": 40}, where: Where('name', WhereOperator.isEqual, 'Name Name'));
+  // update all
+  await db.table('tableName').update(update: {"age": 40}, where: null);
+
+  // delete
+  await db.table('tableName').delete(Where('name', WhereOperator.isEqual, 'Name Name'));
+  await db.table('tableName').deleteAll();
+
+  // fetch
+  await db.table('tableName').select(
+    columns: [Column('id'), Column('name', columnAs: 'userName'), Column('age')],
+    where: Where('name', WhereOperator.isEqual, 'Name Name'),
+    orderBy: OrderBy('name', ascending: true)
+  );
+
+  // max, min, 
+  await db.table('tableName').max([Max('age')]);
+  await db.table('tableName').min([Min('age', label: 'minAge')]);
+
+  // count
+  await db.table('tableName').count([Count(columnName: '*')]);
+
+  // sum, avg
+  await db.table('tableName').sum([Sum(columnName: 'age', label: 'totalAge'), Sum(columnName: 'amount')]);
+  await db.table('tableName').avg([Avg(columnName: 'age', label: 'averageAge'), Avg(columnName: 'amount')]);
+
+  // aggregate
+  await db.table('tableName').aggregate([
+    Count(columnName: '*'),
+    Sum(columnName: 'amount', label: 'totalAmount'),
+    Avg(columnName: 'age', label: 'averageAge'),
+  ]);
+
+  // group
+  await db.table('tableName').group(
+    groupBy: ['gender'],
+    columns: [Column('gender')],
+    aggregates: [
+      Count(columnName: '*'),
+      Sum(columnName: 'amount', label: 'totalAmount'),
+      Avg(columnName: 'age', label: 'averageAge'),
+    ]
+  );
+
+  // join
+  await db.table('tableName').join(
+    tableAs: 't1',
+    columns: [Column('t1.id', columnAs: 'id'), Column('t1.name', columnAs: 'name'), Column('t3.age', columnAs: 'age'),],
+    joins: [
+      Join(joinType: JoinType.inner, tableName: 'table2', tableAs: 't2', onorUsing: JoinOn(leftColumnName: 't1.id', rightColumnName: 't2.userid', operator: WhereOperator.isEqual)),
+      Join(joinType: JoinType.inner, tableName: 'table3', tableAs: 't3', onorUsing: JoinUsing(columnName: 'userid')),
+    ]
+  );
+</code></pre>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="postgres_dart">
+  <span class="name"><a href="postgres_dart/postgres_dart-library.html">postgres_dart</a></span> 
+
+</dt>
+<dd>Support for doing something awesome.
+</dd>
+
+        </dl>
+      </section>
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">postgres_dart package</li>
+</ol>
+
+
+    <h5 class="hidden-xs"><span class="package-name">postgres_dart</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="postgres_dart/postgres_dart-library.html">postgres_dart</a></li>
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+
+</main>
+
+<footer>
+  <span class="no-break">
+    postgres_dart
+      1.0.0
+  </span>
+
+  
+</footer>
+
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
