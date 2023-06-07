@@ -11,4 +11,5 @@ export 'package:postgres_dart/src/column.dart';
 export 'package:postgres_dart/src/joins.dart';
 export 'package:postgres_dart/src/min_max.dart';
 export 'package:postgres_dart/src/order_by.dart';
+export 'package:postgres_dart/src/postgres_table.dart';
 export 'package:postgres_dart/src/where.dart';

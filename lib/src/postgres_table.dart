@@ -6,6 +6,7 @@ import 'package:postgres_dart/src/min_max.dart';
 import 'package:postgres_dart/src/order_by.dart';
 import 'package:postgres_dart/src/where.dart';
 
+/// Contains Table methods such as [select], [insert], [update], [delete], [deleteAll], [min], [max], [count], [sum], [avg], [aggregate], [group], [join]
 class PostgresTable {
   PostgresTable({required this.db, required this.tableName});
   final PostgreSQLConnection db;
