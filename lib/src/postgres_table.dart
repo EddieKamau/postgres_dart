@@ -232,7 +232,7 @@ class PostgresTable {
     for (var key in update.keys) {
       String val =
           update[key] is String ? "'${update[key]}'" : update[key].toString();
-      _values.add('$key = $val');
+      _values.add('"$key" = $val');
     }
     if (_values.isEmpty) return DbResponse([], []);
 
