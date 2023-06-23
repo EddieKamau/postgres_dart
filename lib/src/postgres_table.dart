@@ -201,6 +201,8 @@ class PostgresTable {
     List<String> _values = values.map((e) {
       if (e is String) {
         return "'$e'";
+      }else if (e is List) {
+        return "'${_listValue(e)}'";
       } else {
         return e.toString();
       }
@@ -232,12 +234,6 @@ class PostgresTable {
     List<String> _values = [];
 
     for (var key in update.keys) {
-      String _listValue(List val){
-        var res = json.encode(val);
-        res = res.replaceFirst('[', '{');
-        res = res.replaceFirst(']', '}');
-        return res;
-      }
       String val =
           update[key] is String ? "'${update[key]}'": update[key] is List ? "'${_listValue(update[key])}'" : update[key].toString();
       _values.add('"$key" = $val');
@@ -277,6 +273,13 @@ class PostgresTable {
     return DbResponse(
         dbRes.columnDescriptions.map((e) => e.columnName).toList(),
         List<List>.from(dbRes.toList()));
+  }
+
+  String _listValue(List val){
+    var res = json.encode(val);
+    res = res.replaceFirst('[', '{');
+    res = res.replaceFirst(']', '}');
+    return res;
   }
 
   // transaction
