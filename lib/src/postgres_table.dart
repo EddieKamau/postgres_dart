@@ -48,7 +48,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(min.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(min.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -66,7 +66,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(max.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(max.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -84,7 +84,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(count.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(count.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -102,7 +102,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(sum.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(sum.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -120,7 +120,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(avg.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(avg.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -147,7 +147,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(aggregates.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -163,7 +163,7 @@ class PostgresTable {
       Where? where,
       OrderBy? orderBy}) async {
     String query =
-        'SELECT ${columns == null ? "" : "${columns.join(",")},"} ${aggregates == null ? "" : (aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where, groupBy: groupBy, orderBy: orderBy)}';
+        'SELECT ${columns == null ? "" : "${columns.map((val)=>'"$val"').join(',')},"} ${aggregates == null ? "" : (aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where, groupBy: groupBy, orderBy: orderBy)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -180,7 +180,7 @@ class PostgresTable {
       OrderBy? orderBy,
       int? limit}) async {
     String query =
-        'SELECT ${columns.isEmpty ? "*" : columns.join(",")} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map(
+        'SELECT ${columns.isEmpty ? "*" : columns.map((val)=>'"$val"').join(',')} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map(
               (e) => e.query,
             ).join(" ")} ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
     var dbRes = await db.query(query);
@@ -204,7 +204,7 @@ class PostgresTable {
       }
     }).toList();
     String query =
-        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.join(',')})"} VALUES (${_values.join(",")})';
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} VALUES (${_values.join(",")})';
     var dbRes = await db.query(query);
 
     return DbResponse(
