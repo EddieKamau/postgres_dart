@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:postgres/postgres.dart';
 import 'package:postgres_dart/src/aggregate.dart';
 import 'package:postgres_dart/src/column.dart';
@@ -230,8 +232,14 @@ class PostgresTable {
     List<String> _values = [];
 
     for (var key in update.keys) {
+      String _listValue(List val){
+        var res = json.encode(val);
+        res = res.replaceFirst('[', '{');
+        res = res.replaceFirst(']', '}');
+        return res;
+      }
       String val =
-          update[key] is String ? "'${update[key]}'" : update[key].toString();
+          update[key] is String ? "'${update[key]}'": update[key] is List ? "'${_listValue(update[key])}'" : update[key].toString();
       _values.add('"$key" = $val');
     }
     if (_values.isEmpty) return DbResponse([], []);
