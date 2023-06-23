@@ -94,27 +94,27 @@ void main() {
   group('Where', () {
     test('Where', () {
       Where where = Where('columnName', WhereOperator.isEqual, 10);
-      expect(where.query, 'WHERE "columnName" = 10 ');
+      expect(where.query(), 'WHERE "columnName" = 10 ');
     });
     test('Where not', () {
       Where where = Where.not('columnName', WhereOperator.isBetween, 10);
-      expect(where.query, 'WHERE NOT "columnName" BETWEEN 10 ');
+      expect(where.query(), 'WHERE NOT "columnName" BETWEEN 10 ');
     });
     test('Where or', () {
       Where where = Where('columnName', WhereOperator.isEqual, 10)
           .or('columnName2', WhereOperator.isIn, [1, 2, 3]);
-      expect(where.query,
+      expect(where.query(),
           'WHERE "columnName" = 10  OR  "columnName2" IN [1, 2, 3] ');
     });
     test('Where and', () {
       Where where = Where('columnName', WhereOperator.isLessThanOrEqual, 10)
           .and('columnName2', WhereOperator.isGreaterThan, 50);
-      expect(where.query, 'WHERE "columnName" <= 10  AND  "columnName2" > 50 ');
+      expect(where.query(), 'WHERE "columnName" <= 10  AND  "columnName2" > 50 ');
     });
     test('Where and not', () {
       Where where = Where('columnName', WhereOperator.isLike, 10)
           .andNot('columnName2', WhereOperator.isNotEqual, 50);
-      expect(where.query,
+      expect(where.query(),
           'WHERE "columnName" LIKE 10  AND NOT  "columnName2" <> 50 ');
     });
   });

@@ -22,10 +22,10 @@ class Where {
   final WhereOperator operator;
   String prev = 'WHERE';
 
-  String get query {
+  String query([String? label]) {
     // ignore: no_leading_underscores_for_local_identifiers
     Object _value = value is String ? "'$value'" : value;
-    return '$prev "$columnName" ${operator.operator} $_value ';
+    return '$prev ${label == null ? "" : "$label."}"$columnName" ${operator.operator} $_value ';
   }
 
   Where or(

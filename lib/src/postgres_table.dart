@@ -8,15 +8,15 @@ import 'package:postgres_dart/src/min_max.dart';
 import 'package:postgres_dart/src/order_by.dart';
 import 'package:postgres_dart/src/where.dart';
 
-/// Contains Table methods such as [select], [insert], [update], [delete], [deleteAll], [min], [max], [count], [sum], [avg], [aggregate], [group], [join]
+/// Contains Table methods such as [select], [insert], [inserMany], [update], [delete], [deleteAll], [min], [max], [count], [sum], [avg], [aggregate], [group], [join]
 class PostgresTable {
   PostgresTable({required this.db, required this.tableName});
   final PostgreSQLConnection db;
   final String tableName;
 
   String getQuery(
-      {Where? where, OrderBy? orderBy, int? limit, List<String>? groupBy}) {
-    return '${where == null ? "" : where.query} ${groupBy == null ? "" : "GROUP BY ${groupBy.map(
+      {Where? where, OrderBy? orderBy, int? limit, List<String>? groupBy, String? label}) {
+    return '${where == null ? "" : where.query(label)} ${groupBy == null ? "" : "GROUP BY ${groupBy.map(
           (e) => '"$e"',
         ).join(",")}"} ${orderBy == null ? "" : orderBy.query} ${limit == null ? "" : "LIMIT $limit"}';
   }
@@ -209,6 +209,121 @@ class PostgresTable {
     }).toList();
     String query =
         'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} VALUES (${_values.join(",")})';
+    var dbRes = await db.query(query);
+
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
+  }
+
+  // insert if Non-Existing
+  Future<DbResponse> insertIfNonExisting({
+    required List values,
+    List<String>? columns,
+    required Where where,
+  }) async {
+    // ignore: no_leading_underscores_for_local_identifiers
+    List<String> _values = values.map((e) {
+      if (e is String) {
+        return "'$e'";
+      }else if (e is List) {
+        return "'${_listValue(e)}'";
+      } else {
+        return e.toString();
+      }
+    }).toList();
+    String query =
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} SELECT ${_values.join(",")} WHERE NOT EXISTS (SELECT id FROM $tableName  ${getQuery(where: where,)})';
+    var dbRes = await db.query(query);
+
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
+  }
+
+  // insert Many
+  Future<DbResponse> insertMany({
+    required List<List> values,
+    List<String>? columns,
+  }) async {
+    // ignore: no_leading_underscores_for_local_identifiers
+    List<String> _values = values.map((row) {
+      final k = row.map((e){
+        if (e is String) {
+          return "'$e'";
+        }else if (e is List) {
+          return "'${_listValue(e)}'";
+        } else {
+          return e.toString();
+        }
+      }).join(",");
+      return '($k)';
+      
+    }).toList();
+    String query =
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} VALUES ${_values.join(",")}';
+    var dbRes = await db.query(query);
+
+    return DbResponse(
+        dbRes.columnDescriptions.map((e) => e.columnName).toList(),
+        List<List>.from(dbRes.toList()));
+  }
+
+  // insert Many  if Non-Existing
+  Future<DbResponse> insertManyIfNonExisting({
+    required List<List> values,
+    List<String>? columns,
+    required List<String> where,
+  }) async {
+    // ignore: no_leading_underscores_for_local_identifiers
+    List<String> _values = values.map((row) {
+      final k = row.map((e){
+        if (e is String) {
+          return "'$e'";
+        }else if (e is List) {
+          return "'${_listValue(e)}'";
+        } else {
+          return e.toString();
+        }
+      }).join(",");
+      return '($k)';
+      
+    }).toList();
+
+    final whereCol = where.map((val){
+      return 'u2."$val" = d."$val"';
+    }).toList();
+    ({List<String> plain, List<String> select})? getColumns(){
+      final List<String> plain = []; final List<String> select = [];
+      if(columns == null){
+        return null;
+      }
+      for (var element in columns) {
+        if(element.contains("::")){
+          final el = element.split("::");
+          plain.add('"${el[0]}"');
+          select.add('d."${el[0]}"::${el[1]}');
+        }else{
+          plain.add('"$element"');
+          select.add('d."$element"');
+        }
+      }
+      return (plain: plain, select: select);
+    }
+    final cols = getColumns();
+    String query = '''
+  WITH DATA${columns == null ? "" : "(${cols!.plain.join(',')})"}  AS (
+   VALUES
+      ${_values.join(",")}
+) 
+INSERT INTO "$tableName" ${columns == null ? "" : "(${cols!.plain.join(',')})"} 
+SELECT ${cols?.select.join(',') ?? ""}
+FROM DATA d
+WHERE NOT EXISTS (SELECT 1
+                  FROM "$tableName" u2
+                  WHERE ${whereCol.join(" AND ")})
+  ''';
+
     var dbRes = await db.query(query);
 
     return DbResponse(
