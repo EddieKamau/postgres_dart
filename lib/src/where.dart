@@ -34,7 +34,7 @@ class Where {
     Object value,
   ) {
     var where = Where(columnName, operator, value);
-    where.prev = '$query OR ';
+    where.prev = '${query()} OR ';
     return where;
   }
 
@@ -44,7 +44,7 @@ class Where {
     Object value,
   ) {
     var where = Where(columnName, operator, value);
-    where.prev = '$query AND ';
+    where.prev = '${query()} AND ';
     return where;
   }
 
@@ -54,7 +54,7 @@ class Where {
     Object value,
   ) {
     var where = Where(columnName, operator, value);
-    where.prev = '$query AND NOT ';
+    where.prev = '${query()} AND NOT ';
     return where;
   }
 }
