@@ -15,7 +15,11 @@ class PostgresTable {
   final String tableName;
 
   String getQuery(
-      {Where? where, OrderBy? orderBy, int? limit, List<String>? groupBy, String? label}) {
+      {Where? where,
+      OrderBy? orderBy,
+      int? limit,
+      List<String>? groupBy,
+      String? label}) {
     return '${where == null ? "" : where.query(label)} ${groupBy == null ? "" : "GROUP BY ${groupBy.map(
           (e) => '"$e"',
         ).join(",")}"} ${orderBy == null ? "" : orderBy.query} ${limit == null ? "" : "LIMIT $limit"}';
@@ -50,7 +54,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(min.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(min.map((e) => e.query)).map((val) => '"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -68,7 +72,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(max.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(max.map((e) => e.query)).map((val) => '"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -86,7 +90,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(count.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(count.map((e) => e.query)).map((val) => '"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -104,7 +108,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(sum.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(sum.map((e) => e.query)).map((val) => '"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -122,7 +126,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(avg.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(avg.map((e) => e.query)).map((val) => '"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -149,7 +153,7 @@ class PostgresTable {
     Where? where,
   }) async {
     String query =
-        'SELECT ${(aggregates.map((e) => e.query)).map((val)=>'"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
+        'SELECT ${(aggregates.map((e) => e.query)).map((val) => '"$val"').join(', ')} FROM "$tableName" ${getQuery(where: where)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -165,7 +169,7 @@ class PostgresTable {
       Where? where,
       OrderBy? orderBy}) async {
     String query =
-        'SELECT ${columns == null ? "" : "${columns.map((val)=>'"$val"').join(',')},"} ${aggregates == null ? "" : (aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where, groupBy: groupBy, orderBy: orderBy)}';
+        'SELECT ${columns == null ? "" : "${columns.map((val) => '"$val"').join(',')},"} ${aggregates == null ? "" : (aggregates.map((e) => e.query)).join(", ")} FROM "$tableName" ${getQuery(where: where, groupBy: groupBy, orderBy: orderBy)}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -182,7 +186,7 @@ class PostgresTable {
       OrderBy? orderBy,
       int? limit}) async {
     String query =
-        'SELECT ${columns.isEmpty ? "*" : columns.map((val)=>'"$val"').join(',')} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map(
+        'SELECT ${columns.isEmpty ? "*" : columns.map((val) => '"$val"').join(',')} FROM "$tableName" ${tableAs == null ? "" : "AS $tableAs"} ${joins.map(
               (e) => e.query,
             ).join(" ")} ${getQuery(where: where, orderBy: orderBy, limit: limit)}';
     var dbRes = await db.query(query);
@@ -201,14 +205,14 @@ class PostgresTable {
     List<String> _values = values.map((e) {
       if (e is String) {
         return "'$e'";
-      }else if (e is List) {
+      } else if (e is List) {
         return "'${_listValue(e)}'";
       } else {
         return e.toString();
       }
     }).toList();
     String query =
-        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} VALUES (${_values.join(",")})';
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val) => '"$val"').join(',')})"} VALUES (${_values.join(",")})';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -226,14 +230,16 @@ class PostgresTable {
     List<String> _values = values.map((e) {
       if (e is String) {
         return "'$e'";
-      }else if (e is List) {
+      } else if (e is List) {
         return "'${_listValue(e)}'";
       } else {
         return e.toString();
       }
     }).toList();
     String query =
-        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} SELECT ${_values.join(",")} WHERE NOT EXISTS (SELECT id FROM $tableName  ${getQuery(where: where,)})';
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val) => '"$val"').join(',')})"} SELECT ${_values.join(",")} WHERE NOT EXISTS (SELECT id FROM $tableName  ${getQuery(
+      where: where,
+    )})';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -248,20 +254,19 @@ class PostgresTable {
   }) async {
     // ignore: no_leading_underscores_for_local_identifiers
     List<String> _values = values.map((row) {
-      final k = row.map((e){
+      final k = row.map((e) {
         if (e is String) {
           return "'$e'";
-        }else if (e is List) {
+        } else if (e is List) {
           return "'${_listValue(e)}'";
         } else {
           return e.toString();
         }
       }).join(",");
       return '($k)';
-      
     }).toList();
     String query =
-        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val)=>'"$val"').join(',')})"} VALUES ${_values.join(",")}';
+        'INSERT INTO  "$tableName" ${columns == null ? "" : "(${columns.map((val) => '"$val"').join(',')})"} VALUES ${_values.join(",")}';
     var dbRes = await db.query(query);
 
     return DbResponse(
@@ -277,39 +282,40 @@ class PostgresTable {
   }) async {
     // ignore: no_leading_underscores_for_local_identifiers
     List<String> _values = values.map((row) {
-      final k = row.map((e){
+      final k = row.map((e) {
         if (e is String) {
           return "'$e'";
-        }else if (e is List) {
+        } else if (e is List) {
           return "'${_listValue(e)}'";
         } else {
           return e.toString();
         }
       }).join(",");
       return '($k)';
-      
     }).toList();
 
-    final whereCol = where.map((val){
+    final whereCol = where.map((val) {
       return 'u2."$val" = d."$val"';
     }).toList();
-    ({List<String> plain, List<String> select})? getColumns(){
-      final List<String> plain = []; final List<String> select = [];
-      if(columns == null){
+    ({List<String> plain, List<String> select})? getColumns() {
+      final List<String> plain = [];
+      final List<String> select = [];
+      if (columns == null) {
         return null;
       }
       for (var element in columns) {
-        if(element.contains("::")){
+        if (element.contains("::")) {
           final el = element.split("::");
           plain.add('"${el[0]}"');
           select.add('d."${el[0]}"::${el[1]}');
-        }else{
+        } else {
           plain.add('"$element"');
           select.add('d."$element"');
         }
       }
       return (plain: plain, select: select);
     }
+
     final cols = getColumns();
     String query = '''
   WITH DATA${columns == null ? "" : "(${cols!.plain.join(',')})"}  AS (
@@ -349,8 +355,11 @@ WHERE NOT EXISTS (SELECT 1
     List<String> _values = [];
 
     for (var key in update.keys) {
-      String val =
-          update[key] is String ? "'${update[key]}'": update[key] is List ? "'${_listValue(update[key])}'" : update[key].toString();
+      String val = update[key] is String
+          ? "'${update[key]}'"
+          : update[key] is List
+              ? "'${_listValue(update[key])}'"
+              : update[key].toString();
       _values.add('"$key" = $val');
     }
     if (_values.isEmpty) return DbResponse([], []);
@@ -390,7 +399,7 @@ WHERE NOT EXISTS (SELECT 1
         List<List>.from(dbRes.toList()));
   }
 
-  String _listValue(List val){
+  String _listValue(List val) {
     var res = json.encode(val);
     res = res.replaceFirst('[', '{');
     res = res.replaceFirst(']', '}');

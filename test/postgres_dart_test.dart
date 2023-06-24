@@ -109,7 +109,8 @@ void main() {
     test('Where and', () {
       Where where = Where('columnName', WhereOperator.isLessThanOrEqual, 10)
           .and('columnName2', WhereOperator.isGreaterThan, 50);
-      expect(where.query(), 'WHERE "columnName" <= 10  AND  "columnName2" > 50 ');
+      expect(
+          where.query(), 'WHERE "columnName" <= 10  AND  "columnName2" > 50 ');
     });
     test('Where and not', () {
       Where where = Where('columnName', WhereOperator.isLike, 10)
