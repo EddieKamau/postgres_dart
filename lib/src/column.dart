@@ -6,5 +6,5 @@ class Column {
   final String? columnAs;
 
   @override
-  String toString() => '"$columnName"${columnAs == null ? "" : " AS $columnAs"}';
+  String toString() => '$columnName${columnAs == null ? "" : " AS $columnAs"}';
 }
