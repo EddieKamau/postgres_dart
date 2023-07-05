@@ -12,7 +12,7 @@ class OrderBy {
   String prev = 'ORDER BY ';
 
   String get query =>
-      '$prev $columnName ${ascending == null ? "" : ascending! ? "ASC" : "DESC"}';
+      '$prev "$columnName" ${ascending == null ? "" : ascending! ? "ASC" : "DESC"}';
 
   OrderBy and(OrderBy orderBy) {
     orderBy.prev = '$query, ';
